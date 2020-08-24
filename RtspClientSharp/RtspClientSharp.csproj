@@ -10,6 +10,7 @@
 
 - Supported transport protocols: TCP/HTTP/UDP
 - Supported media codecs: H.264/MJPEG/AAC/G711A/G711U/PCM/G726
+- Supported xml data codecs: ONVIF METADATA
 - No external dependencies, pure C# code
 - Asynchronous nature with cancellation tokens support
 - Designed to be fast and scaleable
@@ -17,8 +18,9 @@
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIconUrl>https://github.com/BogdanovKirill/RtspClientSharp/blob/master/Images/package_icon.png?raw=true</PackageIconUrl>
     <Copyright>Copyright ©2019 Kirill Bogdanov</Copyright>
-    <Version>1.3.3</Version>
-    <PackageReleaseNotes>-Bug fix: Additional check for NAL start marker was added. That should resolve issue with some cameras which sends one NAL for one frame without start bytes (0 0 0 1)
+    <Version>1.3.4-beta1</Version>
+    <PackageReleaseNotes>-ONVIF METADATA codec support added
+-Bug fix: Additional check for NAL start marker was added. That should resolve issue with some cameras which sends one NAL for one frame without start bytes (0 0 0 1)
 
 More info: https://github.com/BogdanovKirill/RtspClientSharp/issues/49</PackageReleaseNotes>
     <RepositoryType>git</RepositoryType>
@@ -26,6 +28,8 @@ More info: https://github.com/BogdanovKirill/RtspClientSharp/issues/49</PackageR
     <Configurations>Debug;Release;Publish</Configurations>
     <AssemblyOriginatorKeyFile>signkey.pfx</AssemblyOriginatorKeyFile>
     <PackageRequireLicenseAcceptance>false</PackageRequireLicenseAcceptance>
+    <AssemblyVersion>1.3.4.0</AssemblyVersion>
+    <FileVersion>1.3.4.0</FileVersion>
   </PropertyGroup>
 
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|AnyCPU'">
