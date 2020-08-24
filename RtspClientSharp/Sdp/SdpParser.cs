@@ -5,6 +5,7 @@ using System.IO;
 using System.Linq;
 using RtspClientSharp.Codecs;
 using RtspClientSharp.Codecs.Audio;
+using RtspClientSharp.Codecs.Metadata;
 using RtspClientSharp.Codecs.Video;
 using RtspClientSharp.RawFrames.Video;
 using RtspClientSharp.Utils;
@@ -325,6 +326,9 @@ namespace RtspClientSharp.Sdp
                 case 26:
                     codecInfo = new MJPEGCodecInfo();
                     break;
+                case 98:
+                    codecInfo = new MetadataCodecInfo();
+                    break;
                 case 105:
                     codecInfo = new H264CodecInfo();
                     break;
@@ -340,6 +344,9 @@ namespace RtspClientSharp.Sdp
 
             if (codecName == "H264")
                 return new H264CodecInfo();
+
+            if (codecName == "VND.ONVIF.METADATA")
+                return new MetadataCodecInfo();
 
             bool isPcmu = codecName == "PCMU";
             bool isPcma = codecName == "PCMA";
@@ -429,6 +436,7 @@ namespace RtspClientSharp.Sdp
                 case 32:
                 case 33:
                 case 34:
+                case 98:
                     return 90000;
             }
 

@@ -3,6 +3,7 @@ using System.Net;
 using System.Security.Authentication;
 using System.Threading;
 using System.Threading.Tasks;
+using RtspClientSharp.Codecs.Metadata;
 using RtspClientSharp.RawFrames;
 using RtspClientSharp.Rtsp;
 using RtspClientSharp.Utils;
@@ -12,6 +13,7 @@ namespace RtspClientSharp
     public sealed class RtspClient : IRtspClient
     {
         private readonly Func<IRtspTransportClient> _transportClientProvider;
+        private bool _expectingFrames;
         private bool _anyFrameReceived;
         private RtspClientInternal _rtspClientInternal;
         private int _disposed;
@@ -140,6 +142,7 @@ namespace RtspClientSharp
                     while (true)
                     {
                         _anyFrameReceived = false;
+                        _expectingFrames = !(_rtspClientInternal.Codec is MetadataCodecInfo);
 
                         Task result = await Task.WhenAny(receiveInternalTask,
                             Task.Delay(ConnectionParameters.ReceiveTimeout, delayTaskToken)).ConfigureAwait(false);
@@ -162,7 +165,7 @@ namespace RtspClientSharp
                             throw new OperationCanceledException();
                         }
 
-                        if (!Volatile.Read(ref _anyFrameReceived))
+                        if (_expectingFrames && !Volatile.Read(ref _anyFrameReceived))
                         {
                             receiveInternalTask.IgnoreExceptions();
                             throw new RtspClientException("Receive timeout", new TimeoutException());
