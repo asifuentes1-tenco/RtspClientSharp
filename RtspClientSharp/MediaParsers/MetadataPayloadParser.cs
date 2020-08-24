@@ -12,13 +12,19 @@ namespace RtspClientSharp.MediaParsers
     class MetadataPayloadParser : MediaPayloadParser
     {
         /// <summary>
-        /// Size of the header in the communication
+        /// Usual size of the header in the communication
         /// </summary>
         private const int _headerSize = 16;
+
+        /// To find the starting point of an xml metadata file
+        private readonly byte[] xmlHeader = System.Text.Encoding.UTF8.GetBytes("<?xml");
+        /// To find the ending point of an xml metadata file
+        private readonly byte[] xmlEndMetadata = System.Text.Encoding.UTF8.GetBytes("</tt:MetadataStream>");
+
         /// <summary>
         /// Tries to get bytes in a byte array that are part of one xml metadata response in a rtsp communication
         /// 
-        /// TODO: PARSE XML FILES IN TWO DIFFERENT BYTE SEGMENTS
+        /// TODO: PARSE XML FILES COMMING FROM TWO DIFFERENT BYTE SEGMENTS
         /// </summary>
         /// <param name="timeOffset">Offset between prev. byteSegment</param>
         /// <param name="byteSegment">array of bytes incomming from an rtsp communication</param>
@@ -51,19 +57,17 @@ namespace RtspClientSharp.MediaParsers
         /// <returns>a list of array of bytes, each one of these arrays represents an xml file</returns>
         private List<byte[]> GetXmlFiles(List<byte[]> xmlFiles, byte[] array, bool markerBit)
         {
-            // to find the starting point of an xml metadata file
-            string xmlHeaderTag = "<?xml";
-            // to find the ending point of an xml metadata file
-            string xmlEndMetadataTag = "</tt:MetadataStream>";
-
-            byte[] xmlHeader = System.Text.Encoding.UTF8.GetBytes(xmlHeaderTag);
-            byte[] xmlEndMetadata = System.Text.Encoding.UTF8.GetBytes(xmlEndMetadataTag);
-
             int xmlStartIndex = IndexOf(array, xmlHeader);
-            int xmlEndMetadataIndex = IndexOf(array, xmlEndMetadata) + xmlEndMetadata.Length + 1;
 
-            if (xmlStartIndex == -1 || xmlEndMetadataIndex == -1)
+            if (xmlStartIndex < 0)
                 return xmlFiles;
+
+            int xmlEndMetadataIndex = IndexOf(array, xmlEndMetadata);
+
+            if (xmlEndMetadataIndex < 0) 
+                return xmlFiles;
+            
+            xmlEndMetadataIndex += xmlEndMetadata.Length + 1;
 
             var xmlFile = array.Skip(xmlStartIndex).Take(xmlEndMetadataIndex - xmlStartIndex).ToArray();
             xmlFiles.Add(xmlFile);
@@ -84,25 +88,21 @@ namespace RtspClientSharp.MediaParsers
         /// <param name="arrayToSearchThrough">Base array to search through</param>
         /// <param name="patternToFind">Array to find in the provided base array</param>
         /// <returns></returns>
-        public static int IndexOf(byte[] arrayToSearchThrough, byte[] patternToFind)
+        private int IndexOf(byte[] array, byte[] pattern)
         {
-            if (patternToFind.Length > arrayToSearchThrough.Length)
+            if (pattern.Length > array.Length)
                 return -1;
-            for (int i = 0; i < arrayToSearchThrough.Length - patternToFind.Length; i++)
+
+            var len = pattern.Length;
+            var limit = array.Length - len;
+            for (var i = 0; i <= limit; i++)
             {
-                bool found = true;
-                for (int j = 0; j < patternToFind.Length; j++)
+                var k = 0;
+                for (; k < len; k++)
                 {
-                    if (arrayToSearchThrough[i + j] != patternToFind[j])
-                    {
-                        found = false;
-                        break;
-                    }
+                    if (pattern[k] != array[i + k]) break;
                 }
-                if (found)
-                {
-                    return i;
-                }
+                if (k == len) return i;
             }
             return -1;
         }

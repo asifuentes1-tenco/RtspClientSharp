@@ -12,6 +12,19 @@
     <PackageReference Include="MSTest.TestFramework" Version="1.3.2" />
   </ItemGroup>
 
+    <ItemGroup>
+	    <ContentWithTargetPath Include="xml_test_event.xml">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		    <TargetPath>xml_test_event.xml</TargetPath>
+	    </ContentWithTargetPath>
+    </ItemGroup>
+    <ItemGroup>
+	    <ContentWithTargetPath Include="xml_test_various_event.xml">
+		    <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+		    <TargetPath>xml_test_various_event.xml</TargetPath>
+	    </ContentWithTargetPath>
+    </ItemGroup>
+	
   <ItemGroup>
     <ProjectReference Include="..\RtspClientSharp\RtspClientSharp.csproj" />
   </ItemGroup>
