@@ -340,7 +340,7 @@ namespace RtspClientSharp.Rtsp
                     yield return track;
                 else if (track.Codec is AudioCodecInfo && (_connectionParameters.RequiredTracks & RequiredTracks.Audio) != 0)
                     yield return track;
-                else if (track.Codec is MetadataCodecInfo && (_connectionParameters.RequiredTracks & RequiredTracks.Data) != 0)
+                else if (track.Codec is MetadataCodecInfo )
                     yield return track;
             }
         }
