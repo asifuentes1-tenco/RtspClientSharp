@@ -7,6 +7,7 @@ This repo contains C# RTSP client implementation (called "RtspClientSharp") for 
 ## Features
 - Supported transport protocols: TCP/HTTP/UDP
 - Supported media codecs: H.264/MJPEG/AAC/G711A/G711U/PCM/G726
+- Supported xml data codecs: ONVIF METADATA
 - No external dependencies, pure C# code
 - Asynchronous nature with cancellation tokens support
 - Designed to be fast and scaleable
