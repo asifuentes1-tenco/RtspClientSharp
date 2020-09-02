@@ -20,7 +20,7 @@ NVR-92 - Fixed bug with honeywell cameras
     <PackageLicenseExpression>MIT</PackageLicenseExpression>
     <PackageIconUrl>https://github.com/BogdanovKirill/RtspClientSharp/blob/master/Images/package_icon.png?raw=true</PackageIconUrl>
     <Copyright>Copyright ©2019 Kirill Bogdanov</Copyright>
-    <Version>1.3.4-beta2</Version>
+    <Version>1.3.4-beta3</Version>
     <PackageReleaseNotes>-ONVIF METADATA codec support added
 -Bug fix: Additional check for NAL start marker was added. That should resolve issue with some cameras which sends one NAL for one frame without start bytes (0 0 0 1)
 
