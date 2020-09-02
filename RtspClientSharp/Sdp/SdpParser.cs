@@ -237,7 +237,7 @@ namespace RtspClientSharp.Sdp
             if (commaIndex == -1)
             {
                 // to fix bug with honeywell cameras
-                if(IsBase64String(spropParametersSetValue))
+                if(spropParametersSetValue.ToLowerInvariant() != "h264")
                 {
                     byte[] sps = RawH264Frame.StartMarker.Concat(Convert.FromBase64String(spropParametersSetValue)).ToArray();
                     h264CodecInfo.SpsPpsBytes = sps;
@@ -255,16 +255,6 @@ namespace RtspClientSharp.Sdp
 
                 h264CodecInfo.SpsPpsBytes = sps.Concat(pps).ToArray();
             }
-        }
-        /// <summary>
-        /// Check wheter the string is in a base64 format or not
-        /// </summary>
-        /// <param name="s">string to check</param>
-        /// <returns>true if string is in base64, false otherwise</returns>
-        private static bool IsBase64String(string s)
-        {
-            s = s.Trim();
-            return (s.Length % 4 == 0) && Regex.IsMatch(s, @"^[a-zA-Z0-9\+/]*={1,3}$");
         }
         private static void ParseAACFormatAttributes(string[] formatAttributes, AACCodecInfo aacCodecInfo)
         {
