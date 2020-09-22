@@ -8,7 +8,9 @@ using System.Net;
 using System.Net.Sockets;
 using System.Threading;
 using System.Threading.Tasks;
+using RtspClientSharp.Codecs;
 using RtspClientSharp.Codecs.Audio;
+using RtspClientSharp.Codecs.Metadata;
 using RtspClientSharp.Codecs.Video;
 using RtspClientSharp.MediaParsers;
 using RtspClientSharp.RawFrames;
@@ -22,6 +24,7 @@ namespace RtspClientSharp.Rtsp
 {
     sealed class RtspClientInternal : IDisposable
     {
+        public CodecInfo Codec { get; set; }
         private const int RtcpReportIntervalBaseMs = 5000;
         private static readonly char[] TransportAttributesSeparator = { ';' };
 
@@ -89,6 +92,7 @@ namespace RtspClientSharp.Rtsp
             foreach (RtspMediaTrackInfo track in GetTracksToSetup(tracks))
             {
                 await SetupTrackAsync(track, token);
+                Codec = track.Codec;
                 anyTrackRequested = true;
             }
 
@@ -334,8 +338,9 @@ namespace RtspClientSharp.Rtsp
             {
                 if (track.Codec is VideoCodecInfo && (_connectionParameters.RequiredTracks & RequiredTracks.Video) != 0)
                     yield return track;
-                else if (track.Codec is AudioCodecInfo &&
-                         (_connectionParameters.RequiredTracks & RequiredTracks.Audio) != 0)
+                else if (track.Codec is AudioCodecInfo && (_connectionParameters.RequiredTracks & RequiredTracks.Audio) != 0)
+                    yield return track;
+                else if (track.Codec is MetadataCodecInfo )
                     yield return track;
             }
         }
