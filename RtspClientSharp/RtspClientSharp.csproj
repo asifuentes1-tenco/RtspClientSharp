@@ -4,7 +4,7 @@
     <TargetFramework>netstandard2.0</TargetFramework>
     <GeneratePackageOnBuild>false</GeneratePackageOnBuild>
     <Authors>Kirill Bogdanov</Authors>
-    <RepositoryUrl>https://github.com/BogdanovKirill/RtspClientSharp</RepositoryUrl>
+    <RepositoryUrl>https://github.com/tenco-rd/Nino.ResourceSelector</RepositoryUrl>
     <PackageTags>rtsp, rtp, rtcp</PackageTags>
     <Description>C# RTSP Client for .NET
 
